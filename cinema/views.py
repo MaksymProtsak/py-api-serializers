@@ -11,7 +11,9 @@ from cinema.serializers import (
     ActorSerializer,
     CinemaHallSerializer,
     MovieSerializer,
-    MovieSessionSerializer
+    MovieSessionSerializer,
+    MovieRetrieveSerializer,
+    MovieSessionListSerializer,
 )
 
 
@@ -34,7 +36,23 @@ class MovieViewSet(viewsets.ModelViewSet):
     queryset = Movie.objects.all()
     serializer_class = MovieSerializer
 
+    def get_serializer_class(self):
+        if self.action in ("list", "retrieve"):
+            return MovieRetrieveSerializer
+        return self.serializer_class
+
+    def get_queryset(self):
+        queryset = self.queryset
+        if self.action in ("list", "retrieve"):
+            return queryset.prefetch_related("genres", "actors")
+        return queryset
+
 
 class MovieSessionViewSet(viewsets.ModelViewSet):
     queryset = MovieSession.objects.all()
     serializer_class = MovieSessionSerializer
+
+    def get_serializer_class(self):
+        if self.action in ("list",):
+            return MovieSessionListSerializer
+        return self.serializer_class
