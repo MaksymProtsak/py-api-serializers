@@ -57,5 +57,5 @@ class MovieSessionSerializer(serializers.ModelSerializer):
         fields = ("id", "show_time", "movie", "cinema_hall")
 
 
-class MovieListSessionSerializer(MovieSessionSerializer):
+class MovieSessionListSerializer(MovieSessionSerializer):
     movie = serializers.SlugRelatedField(read_only=True, slug_field="title")
