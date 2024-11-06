@@ -14,6 +14,7 @@ from cinema.serializers import (
     MovieSessionSerializer,
     MovieRetrieveSerializer,
     MovieSessionListSerializer,
+    MovieListSerializer,
 )
 
 
@@ -37,8 +38,10 @@ class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
     def get_serializer_class(self):
-        if self.action in ("list", "retrieve"):
+        if self.action == "retrieve":
             return MovieRetrieveSerializer
+        elif self.action == "list":
+            return MovieListSerializer
         return self.serializer_class
 
     def get_queryset(self):
